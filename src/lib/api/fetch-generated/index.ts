@@ -309,8 +309,6 @@ export type GetSubcategoryCategoryCategoriaIdWithIncidences200ItemIncidenciasIte
   mas?: unknown | null;
   /** @nullable */
   cassetteSize?: string | null;
-  /** @nullable */
-  collimation?: string | null;
 } | null;
 
 export type GetSubcategoryCategoryCategoriaIdWithIncidences200ItemIncidenciasItemCriteriaItem = {
@@ -335,6 +333,10 @@ export type GetSubcategoryCategoryCategoriaIdWithIncidences200ItemIncidenciasIte
   /** @nullable */
   caption?: string | null;
   order: number;
+  /** @nullable */
+  sizeInBytes?: number | null;
+  /** @nullable */
+  format?: string | null;
 };
 
 export type GetSubcategoryCategoryCategoriaIdWithIncidences200ItemIncidenciasItem = {
@@ -354,7 +356,7 @@ export type GetSubcategoryCategoryCategoriaIdWithIncidences200ItemIncidenciasIte
   /** @nullable */
   techTip?: string | null;
   /** @nullable */
-  youtubeId?: string | null;
+  youtubeLink?: string | null;
   /** @nullable */
   youtubeTitle?: string | null;
   createdAt: string;
@@ -461,8 +463,6 @@ export type GetIncidenceId200Params = {
   mas?: unknown | null;
   /** @nullable */
   cassetteSize?: string | null;
-  /** @nullable */
-  collimation?: string | null;
 } | null;
 
 export type GetIncidenceId200CriteriaItem = {
@@ -487,6 +487,10 @@ export type GetIncidenceId200MediasItem = {
   /** @nullable */
   caption?: string | null;
   order: number;
+  /** @nullable */
+  sizeInBytes?: number | null;
+  /** @nullable */
+  format?: string | null;
 };
 
 export type GetIncidenceId200 = {
@@ -506,7 +510,7 @@ export type GetIncidenceId200 = {
   /** @nullable */
   techTip?: string | null;
   /** @nullable */
-  youtubeId?: string | null;
+  youtubeLink?: string | null;
   /** @nullable */
   youtubeTitle?: string | null;
   createdAt: string;
@@ -538,7 +542,6 @@ export type PatchIncidenceIdBodyParams = {
   kvp?: number;
   mas?: number;
   cassetteSize?: string;
-  collimation?: string;
 };
 
 export type PatchIncidenceIdBodyCriteriaItem = {
@@ -562,6 +565,8 @@ export type PatchIncidenceIdBodyMediasItem = {
   url: string;
   caption?: string;
   order: number;
+  sizeInBytes?: number;
+  format?: string;
 };
 
 export type PatchIncidenceIdBody = {
@@ -574,7 +579,7 @@ export type PatchIncidenceIdBody = {
   description?: string;
   structures?: string;
   techTip?: string;
-  youtubeId?: string;
+  youtubeLink?: string;
   youtubeTitle?: string;
   params?: PatchIncidenceIdBodyParams;
   criteria?: PatchIncidenceIdBodyCriteriaItem[];
@@ -596,8 +601,6 @@ export type PatchIncidenceId200Params = {
   mas?: unknown | null;
   /** @nullable */
   cassetteSize?: string | null;
-  /** @nullable */
-  collimation?: string | null;
 } | null;
 
 export type PatchIncidenceId200CriteriaItem = {
@@ -622,6 +625,10 @@ export type PatchIncidenceId200MediasItem = {
   /** @nullable */
   caption?: string | null;
   order: number;
+  /** @nullable */
+  sizeInBytes?: number | null;
+  /** @nullable */
+  format?: string | null;
 };
 
 export type PatchIncidenceId200 = {
@@ -641,7 +648,7 @@ export type PatchIncidenceId200 = {
   /** @nullable */
   techTip?: string | null;
   /** @nullable */
-  youtubeId?: string | null;
+  youtubeLink?: string | null;
   /** @nullable */
   youtubeTitle?: string | null;
   createdAt: string;
@@ -682,8 +689,6 @@ export type DeleteIncidenceId200ItemParams = {
   mas?: unknown | null;
   /** @nullable */
   cassetteSize?: string | null;
-  /** @nullable */
-  collimation?: string | null;
 } | null;
 
 export type DeleteIncidenceId200ItemCriteriaItem = {
@@ -708,6 +713,10 @@ export type DeleteIncidenceId200ItemMediasItem = {
   /** @nullable */
   caption?: string | null;
   order: number;
+  /** @nullable */
+  sizeInBytes?: number | null;
+  /** @nullable */
+  format?: string | null;
 };
 
 export type DeleteIncidenceId200Item = {
@@ -727,7 +736,7 @@ export type DeleteIncidenceId200Item = {
   /** @nullable */
   techTip?: string | null;
   /** @nullable */
-  youtubeId?: string | null;
+  youtubeLink?: string | null;
   /** @nullable */
   youtubeTitle?: string | null;
   createdAt: string;
@@ -776,8 +785,6 @@ export type GetIncidence200ItemParams = {
   mas?: unknown | null;
   /** @nullable */
   cassetteSize?: string | null;
-  /** @nullable */
-  collimation?: string | null;
 } | null;
 
 export type GetIncidence200ItemCriteriaItem = {
@@ -802,6 +809,10 @@ export type GetIncidence200ItemMediasItem = {
   /** @nullable */
   caption?: string | null;
   order: number;
+  /** @nullable */
+  sizeInBytes?: number | null;
+  /** @nullable */
+  format?: string | null;
 };
 
 export type GetIncidence200Item = {
@@ -821,7 +832,7 @@ export type GetIncidence200Item = {
   /** @nullable */
   techTip?: string | null;
   /** @nullable */
-  youtubeId?: string | null;
+  youtubeLink?: string | null;
   /** @nullable */
   youtubeTitle?: string | null;
   createdAt: string;
@@ -848,7 +859,6 @@ export type PostIncidenceBodyParams = {
   kvp?: number;
   mas?: number;
   cassetteSize?: string;
-  collimation?: string;
 };
 
 export type PostIncidenceBodyCriteriaItem = {
@@ -868,6 +878,8 @@ export type PostIncidenceBodyMediasItem = {
   url: string;
   caption?: string;
   order: number;
+  sizeInBytes?: number;
+  format?: string;
 };
 
 export type PostIncidenceBody = {
@@ -880,7 +892,7 @@ export type PostIncidenceBody = {
   description?: string;
   structures?: string;
   techTip?: string;
-  youtubeId?: string;
+  youtubeLink?: string;
   youtubeTitle?: string;
   params?: PostIncidenceBodyParams;
   criteria?: PostIncidenceBodyCriteriaItem[];
@@ -902,8 +914,6 @@ export type PostIncidence201Params = {
   mas?: unknown | null;
   /** @nullable */
   cassetteSize?: string | null;
-  /** @nullable */
-  collimation?: string | null;
 } | null;
 
 export type PostIncidence201CriteriaItem = {
@@ -928,6 +938,10 @@ export type PostIncidence201MediasItem = {
   /** @nullable */
   caption?: string | null;
   order: number;
+  /** @nullable */
+  sizeInBytes?: number | null;
+  /** @nullable */
+  format?: string | null;
 };
 
 export type PostIncidence201 = {
@@ -947,7 +961,7 @@ export type PostIncidence201 = {
   /** @nullable */
   techTip?: string | null;
   /** @nullable */
-  youtubeId?: string | null;
+  youtubeLink?: string | null;
   /** @nullable */
   youtubeTitle?: string | null;
   createdAt: string;
@@ -1029,8 +1043,6 @@ export type GetSync200IncidencesItemParams = {
   mas?: unknown | null;
   /** @nullable */
   cassetteSize?: string | null;
-  /** @nullable */
-  collimation?: string | null;
 } | null;
 
 export type GetSync200IncidencesItemCriteriaItem = {
@@ -1055,6 +1067,10 @@ export type GetSync200IncidencesItemMediasItem = {
   /** @nullable */
   caption?: string | null;
   order: number;
+  /** @nullable */
+  sizeInBytes?: number | null;
+  /** @nullable */
+  format?: string | null;
 };
 
 export type GetSync200IncidencesItemSubcategoriaCategoria = {
@@ -1097,7 +1113,7 @@ export type GetSync200IncidencesItem = {
   /** @nullable */
   techTip?: string | null;
   /** @nullable */
-  youtubeId?: string | null;
+  youtubeLink?: string | null;
   /** @nullable */
   youtubeTitle?: string | null;
   createdAt: string;

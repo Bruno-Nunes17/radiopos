@@ -5,18 +5,21 @@ import RegionDetail from "./page/RegionDetail";
 import IncidenceDetail from "./page/IncidenceDetail";
 import Saved from "./page/Saved";
 import About from "./page/About";
+import { DataProvider } from "./context/DataContext";
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/region/:id" element={<RegionDetail />} />
-        <Route path="/incidence/:id" element={<IncidenceDetail />} />
-        <Route path="/saved" element={<Saved />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-    </Router>
+    <DataProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/region/:id" element={<RegionDetail />} />
+          <Route path="/incidence/:id" element={<IncidenceDetail />} />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Router>
+    </DataProvider>
   );
 };
 

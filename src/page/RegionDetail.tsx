@@ -3,15 +3,48 @@ import { useParams, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import Banner from "../components/Banner";
 import IncidenceCard from "../components/IncidenceCard";
-import { regions } from "../data/regions";
-import { incidences, type Incidence } from "../data/incidences";
+import { useData } from "../hooks/useData";
+
+const iconMap: Record<string, string> = {
+  "cranio": "/cranio.svg",
+  "torax": "/torax.svg",
+  "coluna": "/coluna.svg",
+  "lombar": "/lombar.svg",
+  "pelve": "/pelve.svg",
+  "superiores": "/superiores.svg",
+  "inferiores": "/inferiores.svg",
+  "abdome": "/lombar.svg",
+};
+
+const getCategoryKey = (id: string, name: string): string => {
+  const upperName = name.toUpperCase();
+  if (upperName.includes("CRÂNIO")) return "cranio";
+  if (upperName.includes("TÓRAX")) return "torax";
+  if (upperName.includes("COLUNA")) return "coluna";
+  if (upperName.includes("ABDÔMEN") || upperName.includes("ABDOME")) return "abdome";
+  if (upperName.includes("PELVE")) return "pelve";
+  if (upperName.includes("SUPERIORES")) return "superiores";
+  if (upperName.includes("INFERIORES")) return "inferiores";
+  return id;
+};
 
 const RegionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
-  const region = regions.find((r) => r.id === id);
-  const regionIncidences = incidences.filter((i) => i.regionId === id);
+  const { data, loading } = useData();
+
+  if (loading && !data) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      </Layout>
+    );
+  }
+
+  const region = data?.categories.find((r) => r.id === id);
+  const regionIncidences = data?.incidences.filter((i) => i.subcategoria.categoria.id === id) || [];
 
   if (!region) {
     return (
@@ -21,17 +54,22 @@ const RegionDetail: React.FC = () => {
     );
   }
 
-  // Agrupar incidências por categoria
+  // Agrupar incidências por subcategoria
   const groupedIncidences = regionIncidences.reduce((acc, incidence) => {
-    const category = incidence.category || "Geral";
-    if (!acc[category]) {
-      acc[category] = [];
+    const subcategory = incidence.subcategoria.name || "Geral";
+    if (!acc[subcategory]) {
+      acc[subcategory] = [];
     }
-    acc[category].push(incidence);
+    acc[subcategory].push(incidence);
     return acc;
-  }, {} as Record<string, Incidence[]>);
+  }, {} as Record<string, typeof regionIncidences>);
 
-  const categories = Object.keys(groupedIncidences);
+  const subcategories = Object.keys(groupedIncidences);
+
+  const key = getCategoryKey(region.id, region.name);
+  const icon = iconMap[key] || "/favicon.svg";
+  const color = region.color;
+  const bgColor = region.colorBg;
 
   return (
     <Layout>
@@ -39,31 +77,29 @@ const RegionDetail: React.FC = () => {
         variant="region"
         title={region.name}
         count={`${regionIncidences.length} incidências cadastradas`}
-        icon={region.icon}
-        color={region.color}
-        bgColor={region.bgColor}
+        icon={icon}
+        color={color}
+        bgColor={bgColor}
       />
 
       <div className="px-6 mt-12 flex flex-col gap-8 pb-10">
-        {categories.map((category) => (
-          <div key={category} className="flex flex-col gap-4">
-            {/* Título da Categoria (exibido apenas se houver categorias específicas ou se for Crânio) */}
-            {(category !== "Geral" || categories.length > 1) && (
-              <h3 className="text-lg font-bold text-gray-800 border-l-4 pl-3" style={{ borderColor: region.color }}>
-                {category}
+        {subcategories.map((subcat) => (
+          <div key={subcat} className="flex flex-col gap-4">
+            {subcategories.length > 1 && (
+              <h3 className="text-lg font-bold text-gray-800 border-l-4 pl-3" style={{ borderColor: color }}>
+                {subcat}
               </h3>
             )}
             
             <div className="flex flex-col gap-4">
-              {groupedIncidences[category].map((item) => (
+              {groupedIncidences[subcat].map((item) => (
                 <IncidenceCard
                   key={item.id}
                   title={item.name}
-                  subtitle={item.subtitle}
-                  tag={item.tag}
-                  icon={region.icon}
-                  color={region.color}
-                  bgColor={region.bgColor}
+                  subtitle={item.subcategoria.name}
+                  icon={icon}
+                  color={color}
+                  bgColor={bgColor}
                   onClick={() => navigate(`/incidence/${item.id}`)}
                 />
               ))}

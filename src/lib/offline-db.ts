@@ -1,9 +1,9 @@
 import type { GetSync200, GetSync200CategoriesItem, GetSync200SubcategoriesItem, GetSync200IncidencesItem } from "./api/fetch-generated";
-
 const DB_NAME = "radiopos-db";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORES = {
   DATA: "sync-data",
+  SAVED: "saved-incidences",
 };
 
 export const openDB = (): Promise<IDBDatabase> => {
@@ -18,7 +18,45 @@ export const openDB = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains(STORES.DATA)) {
         db.createObjectStore(STORES.DATA);
       }
+      if (!db.objectStoreNames.contains(STORES.SAVED)) {
+        db.createObjectStore(STORES.SAVED, { keyPath: "id" });
+      }
     };
+  });
+};
+
+// ... mergeById stays the same ...
+
+export const saveIncidenceLocal = async (incidence: GetSync200IncidencesItem): Promise<void> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORES.SAVED, "readwrite");
+    const store = transaction.objectStore(STORES.SAVED);
+    const request = store.put(incidence);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const removeIncidenceLocal = async (id: string): Promise<void> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORES.SAVED, "readwrite");
+    const store = transaction.objectStore(STORES.SAVED);
+    const request = store.delete(id);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const getSavedIncidences = async (): Promise<GetSync200IncidencesItem[]> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORES.SAVED, "readonly");
+    const store = transaction.objectStore(STORES.SAVED);
+    const request = store.getAll();
+    request.onsuccess = () => resolve(request.result || []);
+    request.onerror = () => reject(request.error);
   });
 };
 

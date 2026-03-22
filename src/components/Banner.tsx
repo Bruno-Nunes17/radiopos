@@ -12,6 +12,9 @@ interface BannerProps {
   bgColor?: string;
   icon?: string;
   showSearch?: boolean;
+  isSaved?: boolean;
+  onToggleSave?: () => void;
+  onSearch?: (value: string) => void;
 }
 
 const Banner: React.FC<BannerProps> = ({
@@ -23,6 +26,9 @@ const Banner: React.FC<BannerProps> = ({
   bgColor,
   icon,
   showSearch = true,
+  isSaved = false,
+  onToggleSave,
+  onSearch,
 }) => {
   const navigate = useNavigate();
   const [ModalOpen, setModalOpen] = useState(false);
@@ -165,6 +171,7 @@ const Banner: React.FC<BannerProps> = ({
               <input
                 type="text"
                 placeholder="Buscar incidência"
+                onChange={(e) => onSearch?.(e.target.value)}
                 className="w-full h-12 bg-white rounded-2xl pl-12 pr-4 text-sm outline-none shadow-md placeholder:text-[#999999] text-[#000000] border border-black/5"
               />
             </div>
@@ -189,10 +196,13 @@ const Banner: React.FC<BannerProps> = ({
             <ChevronLeft className="w-8 h-8" />
           </button>
           <button
-            className="w-12 h-12 bg-white/15 rounded-2xl flex items-center justify-center"
+            onClick={onToggleSave}
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
+              isSaved ? "bg-white/40" : "bg-white/15"
+            }`}
             style={{ color: color }}
           >
-            <Bookmark className="w-7 h-7" />
+            <Bookmark className={`w-7 h-7 ${isSaved ? "fill-current" : ""}`} />
           </button>
         </div>
 

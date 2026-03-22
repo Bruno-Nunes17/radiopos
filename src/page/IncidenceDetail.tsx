@@ -6,7 +6,7 @@ import { useData } from "../hooks/useData";
 
 const IncidenceDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, loading } = useData();
+  const { data, loading, toggleSave, isSaved: checkIsSaved } = useData();
 
   if (loading && !data) {
     return (
@@ -31,6 +31,8 @@ const IncidenceDetail: React.FC = () => {
   const category = incidence.subcategoria.categoria;
   const color = category.color;
   const bgColor = category.colorBg;
+  
+  const isSaved = checkIsSaved(incidence.id);
 
   // Encontrar imagem do posicionamento (tipo 'illustration' ou 'xray')
   const illustration = incidence.medias?.find(m => m.type === 'illustration');
@@ -44,6 +46,8 @@ const IncidenceDetail: React.FC = () => {
         subtitle={incidence.subcategoria.name}
         color={color}
         bgColor={bgColor}
+        isSaved={isSaved}
+        onToggleSave={() => toggleSave(incidence)}
       />
 
       <div className="px-6 mt-6 flex flex-col gap-6 pb-10">

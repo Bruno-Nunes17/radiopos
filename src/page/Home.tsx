@@ -48,7 +48,7 @@ const Home: React.FC = () => {
 
   return (
     <Layout>
-      <Banner variant="home" />
+      <Banner variant="home" showSearch={false} />
 
       {/* Anatomical Regions Section */}
       <div className="px-6 mt-8 flex flex-col items-start">

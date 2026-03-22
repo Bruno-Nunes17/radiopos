@@ -11,10 +11,12 @@ export const syncAppData = async () => {
     const response = await getSync({ since });
     
     if (response.status === 200 && 'syncedAt' in response.data) {
-      // Se a API retornou novos dados, salvamos
+      // Se a API retornou novos dados, salvamos (a função saveSyncData já faz o merge)
       await saveSyncData(response.data);
       console.log("Dados sincronizados com sucesso");
-      return response.data;
+      
+      // Sempre retornamos o estado completo do banco local após o merge
+      return await getSyncData();
     }
     
     return localData;

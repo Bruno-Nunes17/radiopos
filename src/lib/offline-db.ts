@@ -1,9 +1,10 @@
-import type { GetSync200, GetSync200CategoriesItem, GetSync200SubcategoriesItem, GetSync200IncidencesItem } from "./api/fetch-generated";
+import type { GetSync200, GetSync200IncidencesItem } from "./api/fetch-generated";
 const DB_NAME = "radiopos-db";
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const STORES = {
   DATA: "sync-data",
   SAVED: "saved-incidences",
+  RECENT: "recent-incidences",
 };
 
 export const openDB = (): Promise<IDBDatabase> => {
@@ -21,11 +22,49 @@ export const openDB = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains(STORES.SAVED)) {
         db.createObjectStore(STORES.SAVED, { keyPath: "id" });
       }
+      if (!db.objectStoreNames.contains(STORES.RECENT)) {
+        db.createObjectStore(STORES.RECENT, { keyPath: "id" });
+      }
     };
   });
 };
 
-// ... mergeById stays the same ...
+// ... mergeById and other functions ...
+
+export const saveRecentIncidence = async (incidence: GetSync200IncidencesItem): Promise<void> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORES.RECENT, "readwrite");
+    const store = transaction.objectStore(STORES.RECENT);
+
+    // Adicionamos a data de acesso para ordenar
+    const itemWithTimestamp = { ...incidence, lastAccessed: Date.now() };
+    const request = store.put(itemWithTimestamp);
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const getRecentIncidences = async (limit = 5): Promise<GetSync200IncidencesItem[]> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORES.RECENT, "readonly");
+    const store = transaction.objectStore(STORES.RECENT);
+    const request = store.getAll();
+
+    request.onsuccess = () => {
+      const result = (request.result || []) as (GetSync200IncidencesItem & { lastAccessed: number })[];
+      // Ordenar por data de acesso (mais recente primeiro) e limitar
+      const sorted = result
+        .sort((a, b) => b.lastAccessed - a.lastAccessed)
+        .slice(0, limit);
+      resolve(sorted);
+    };
+    request.onerror = () => reject(request.error);
+  });
+};
+
 
 export const saveIncidenceLocal = async (incidence: GetSync200IncidencesItem): Promise<void> => {
   const db = await openDB();

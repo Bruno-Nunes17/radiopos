@@ -17,7 +17,6 @@ const iconMap: Record<string, string> = {
   "abdome": "/lombar.svg",
 };
 
-// IDs fixos das categorias no banco para mapeamento de ícones
 const getCategoryKey = (id: string, name: string): string => {
   const upperName = name.toUpperCase();
   if (upperName.includes("CRÂNIO")) return "cranio";
@@ -32,7 +31,7 @@ const getCategoryKey = (id: string, name: string): string => {
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { data, loading } = useData();
+  const { data, loading, recentIncidences } = useData();
 
   if (loading && !data) {
     return (
@@ -46,15 +45,6 @@ const Home: React.FC = () => {
 
   const categories = data?.categories || [];
   const incidences = data?.incidences || [];
-
-  // Get some "recently added" items (limit to 5)
-  const recent = incidences.slice(0, 5).map(i => {
-    const category = categories.find(c => c.id === i.subcategoria.categoria.id);
-    return {
-      ...i,
-      category
-    };
-  });
 
   return (
     <Layout>
@@ -83,29 +73,32 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      {/* Recently Added Section */}
-      <div className="px-6 mt-10 pb-10">
-        <h3 className="text-[#555555] font-semibold mb-4 text-sm uppercase">
-          Adicionados recentemente
-        </h3>
+      {/* Recently Accessed Section */}
+      {recentIncidences.length > 0 && (
+        <div className="px-6 mt-10 pb-10">
+          <h3 className="text-[#555555] font-semibold mb-4 text-sm uppercase">
+            Acessados recentemente
+          </h3>
 
-        <div className="flex flex-col gap-3">
-          {recent.map((item) => {
-            const key = getCategoryKey(item.category?.id || "", item.category?.name || "");
-            return (
-              <IncidenceCard
-                key={item.id}
-                title={item.name}
-                subtitle={item.category?.name}
-                icon={iconMap[key] || "/favicon.svg"}
-                color={item.category?.color || "#00874a"}
-                bgColor={item.category?.colorBg || "rgba(0, 135, 74, 0.15)"}
-                onClick={() => navigate(`/incidence/${item.id}`)}
-              />
-            );
-          })}
+          <div className="flex flex-col gap-3">
+            {recentIncidences.map((item) => {
+              const category = item.subcategoria.categoria;
+              const key = getCategoryKey(category.id, category.name);
+              return (
+                <IncidenceCard
+                  key={item.id}
+                  title={item.name}
+                  subtitle={category.name}
+                  icon={iconMap[key] || "/favicon.svg"}
+                  color={category.color}
+                  bgColor={category.colorBg}
+                  onClick={() => navigate(`/incidence/${item.id}`)}
+                />
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </Layout>
   );
 };

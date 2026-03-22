@@ -76,7 +76,7 @@ const RegionDetail: React.FC = () => {
       <Banner
         variant="region"
         title={region.name}
-        count={`${regionIncidences.length} incidências cadastradas`}
+        count={regionIncidences.length > 1 ? `${regionIncidences.length} incidências` : `${regionIncidences.length} incidência`}
         icon={icon}
         color={color}
         bgColor={bgColor}

@@ -1,15 +1,17 @@
 import React, { createContext, useEffect, useState } from "react";
 import type { GetSync200, GetSync200IncidencesItem } from "../lib/api/fetch-generated";
 import { syncAppData } from "../lib/sync";
-import { getSyncData, getSavedIncidences, saveIncidenceLocal, removeIncidenceLocal } from "../lib/offline-db";
+import { getSyncData, getSavedIncidences, saveIncidenceLocal, removeIncidenceLocal, getRecentIncidences, saveRecentIncidence } from "../lib/offline-db";
 
 export interface DataContextType {
   data: GetSync200 | null;
   loading: boolean;
   savedIncidences: GetSync200IncidencesItem[];
+  recentIncidences: GetSync200IncidencesItem[];
   sync: () => Promise<void>;
   toggleSave: (incidence: GetSync200IncidencesItem) => Promise<void>;
   isSaved: (id: string) => boolean;
+  addToRecent: (incidence: GetSync200IncidencesItem) => Promise<void>;
 }
 
 export const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -18,6 +20,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [data, setData] = useState<GetSync200 | null>(null);
   const [loading, setLoading] = useState(true);
   const [savedIncidences, setSavedIncidences] = useState<GetSync200IncidencesItem[]>([]);
+  const [recentIncidences, setRecentIncidences] = useState<GetSync200IncidencesItem[]>([]);
 
   const sync = async () => {
     setLoading(true);
@@ -26,11 +29,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setData(result);
     }
     setLoading(false);
-  };
-
-  const loadSaved = async () => {
-    const saved = await getSavedIncidences();
-    setSavedIncidences(saved);
   };
 
   const toggleSave = async (incidence: GetSync200IncidencesItem) => {
@@ -48,17 +46,26 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return savedIncidences.some(i => i.id === id);
   };
 
+  const addToRecent = async (incidence: GetSync200IncidencesItem) => {
+    await saveRecentIncidence(incidence);
+    const updatedRecent = await getRecentIncidences(5);
+    setRecentIncidences(updatedRecent);
+  };
+
   useEffect(() => {
     const init = async () => {
-      // Carregar salvos e local primeiro
-      const [local, saved] = await Promise.all([getSyncData(), getSavedIncidences()]);
+      const [local, saved, recent] = await Promise.all([
+        getSyncData(), 
+        getSavedIncidences(),
+        getRecentIncidences(5)
+      ]);
       
       if (local) setData(local);
       setSavedIncidences(saved);
+      setRecentIncidences(recent);
       
       if (local) setLoading(false);
       
-      // Sincronizar em background
       await sync();
     };
 
@@ -66,7 +73,16 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <DataContext.Provider value={{ data, loading, savedIncidences, sync, toggleSave, isSaved }}>
+    <DataContext.Provider value={{ 
+      data, 
+      loading, 
+      savedIncidences, 
+      recentIncidences, 
+      sync, 
+      toggleSave, 
+      isSaved,
+      addToRecent
+    }}>
       {children}
     </DataContext.Provider>
   );

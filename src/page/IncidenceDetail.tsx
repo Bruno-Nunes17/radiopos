@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "../components/Layout";
 import Banner from "../components/Banner";
@@ -6,7 +6,15 @@ import { useData } from "../hooks/useData";
 
 const IncidenceDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, loading, toggleSave, isSaved: checkIsSaved } = useData();
+  const { data, loading, toggleSave, isSaved: checkIsSaved, addToRecent } = useData();
+
+  const incidence = data?.incidences.find((i) => i.id === id);
+
+  useEffect(() => {
+    if (incidence) {
+      addToRecent(incidence);
+    }
+  }, [id, incidence, addToRecent]);
 
   if (loading && !data) {
     return (
@@ -18,8 +26,6 @@ const IncidenceDetail: React.FC = () => {
     );
   }
 
-  const incidence = data?.incidences.find((i) => i.id === id);
-  
   if (!incidence) {
     return (
       <Layout>
@@ -90,7 +96,7 @@ const IncidenceDetail: React.FC = () => {
               <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
                 Raio Central
               </span>
-              <span className="text-lg font-bold" style={{ color: color }}>
+              <span className="text-sm ">
                 {incidence.params?.centralRay || "--"}
               </span>
             </div>
@@ -98,7 +104,7 @@ const IncidenceDetail: React.FC = () => {
               <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
                 DFF
               </span>
-              <span className="text-lg font-bold" style={{ color: color }}>
+              <span className="text-sm ">
                 {incidence.params?.ffd || "--"}
               </span>
             </div>
@@ -106,7 +112,7 @@ const IncidenceDetail: React.FC = () => {
               <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
                 KVp Sugerido
               </span>
-              <span className="text-sm font-bold" style={{ color: color }}>
+              <span className="text-sm ">
                 {incidence.params?.kvp || "--"}
               </span>
             </div>
@@ -114,7 +120,7 @@ const IncidenceDetail: React.FC = () => {
               <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
                 mAs Sugerido
               </span>
-              <span className="text-sm font-bold" style={{ color: color }}>
+              <span className="text-sm ">
                 {typeof incidence.params?.mas === 'string' || typeof incidence.params?.mas === 'number' ? String(incidence.params.mas) : "--"}
               </span>
             </div>
@@ -122,7 +128,7 @@ const IncidenceDetail: React.FC = () => {
               <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
                 Chassis ou Cassete
               </span>
-              <span className="text-sm font-bold" style={{ color: color }}>
+              <span className="text-sm ">
                 {incidence.params?.cassetteSize || "--"}
               </span>
             </div>

@@ -12,7 +12,18 @@ export default defineConfig({
     svgr(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg", "robots.txt"],
+      includeAssets: [
+        "favicon.svg",
+        "robots.txt",
+        "coluna.svg",
+        "cranio.svg",
+        "icons.svg",
+        "inferiores.svg",
+        "lombar.svg",
+        "pelve.svg",
+        "superiores.svg",
+        "torax.svg",
+      ],
       manifest: {
         name: "RadioPos - Radiologia Industrial",
         short_name: "RadioPos",

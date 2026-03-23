@@ -82,202 +82,204 @@ const IncidenceDetail: React.FC = () => {
         onToggleSave={() => toggleSave(incidence)}
       />
 
-      <div className="px-6 mt-6 flex flex-col gap-6 pb-10">
-        {/* Image Display */}
-        {illustration ? (
-           <div 
-             className="w-full max-w-2xl mx-auto rounded-2xl overflow-hidden mt-5 shadow-md cursor-zoom-in relative group"
-             onClick={() => setFullscreenImage(illustration.url)}
-           >
-             <img src={illustration.url} alt="Posicionamento" className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
-             <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-               <ZoomIn className="w-5 h-5 text-white" />
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="px-6 mt-6 flex flex-col gap-6 pb-10">
+          {/* Image Display */}
+          {illustration ? (
+             <div 
+               className="w-full rounded-2xl overflow-hidden mt-5 shadow-md cursor-zoom-in relative group"
+               onClick={() => setFullscreenImage(illustration.url)}
+             >
+               <img src={illustration.url} alt="Posicionamento" className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+               <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                 <ZoomIn className="w-5 h-5 text-white" />
+               </div>
+               {illustration.caption && (
+                 <div className="bg-gray-100 p-2 text-xs text-gray-600 text-center">{illustration.caption}</div>
+               )}
              </div>
-             {illustration.caption && (
-               <div className="bg-gray-100 p-2 text-xs text-gray-600 text-center">{illustration.caption}</div>
-             )}
-           </div>
-        ) : (
-          <div className="w-full max-w-2xl mx-auto aspect-video bg-gray-200 rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-300 mt-5 px-5">
-            <span className="text-gray-400 text-sm text-center">
-              Imagem do Posicionamento não disponível
-            </span>
-          </div>
-        )}
-
-        {/* YouTube Video Player */}
-        {isOnline && videoId && (
-          <div className="w-full max-w-2xl mx-auto flex flex-col gap-3">
-             {!showVideo ? (
-               <button 
-                 onClick={() => setShowVideo(true)}
-                 className="w-full py-4 bg-[#FF0000] hover:bg-[#CC0000] text-white rounded-2xl flex items-center justify-center gap-3 transition-all shadow-md font-bold active:scale-[0.98]"
-               >
-                 <Play className="w-6 h-6 fill-current" />
-                 Ver Vídeo Demonstrativo
-               </button>
-             ) : (
-               <>
-                 <div className="flex justify-between items-center">
-                   <h3 className="text-[#555555] font-bold text-sm uppercase">
-                     Vídeo Demonstrativo
-                   </h3>
-                   <button 
-                     onClick={() => setShowVideo(false)}
-                     className="text-[10px] font-bold text-[#FF0000] uppercase tracking-wider flex items-center gap-1 bg-red-50 px-2 py-1 rounded-lg"
-                   >
-                     <X className="w-3 h-3" />
-                     Ocultar vídeo
-                   </button>
-                 </div>
-                 <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md bg-black animate-in zoom-in-95 duration-300">
-                   <iframe
-                     className="absolute inset-0 w-full h-full"
-                     src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                     title={incidence.youtubeTitle || "Vídeo de Posicionamento"}
-                     frameBorder="0"
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                     allowFullScreen
-                   ></iframe>
-                 </div>
-                 {incidence.youtubeTitle && (
-                   <p className="text-xs text-gray-500 italic text-center px-4">
-                     {incidence.youtubeTitle}
-                   </p>
-                 )}
-               </>
-             )}
-          </div>
-        )}
-
-        {/* Positioning Section */}
-        <div
-          className="rounded-2xl p-5 shadow-sm border border-black/5"
-          style={{ backgroundColor: bgColor }}
-        >
-          <h3 className="text-[#555555] font-bold text-sm mb-3 uppercase">
-            Posicionamento
-          </h3>
-          <p className="text-[#000000] text-sm leading-relaxed">
-            {incidence.position || "Informação não disponível."}
-          </p>
-        </div>
-
-        {/* Technique Section */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-black/5">
-          <h3 className="text-[#555555] font-bold text-sm mb-4 uppercase">
-            Técnica Sugerida
-          </h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
-              <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
-                Raio Central
-              </span>
-              <span className="text-sm ">
-                {incidence.params?.centralRay || "--"}
+          ) : (
+            <div className="w-full aspect-video bg-gray-200 rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-300 mt-5 px-5">
+              <span className="text-gray-400 text-sm text-center">
+                Imagem do Posicionamento não disponível
               </span>
             </div>
-            <div className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
-              <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
-                DFF
-              </span>
-              <span className="text-sm ">
-                {incidence.params?.ffd || "--"}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
-              <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
-                KVp Sugerido
-              </span>
-              <span className="text-sm ">
-                {incidence.params?.kvp || "--"}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
-              <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
-                mAs Sugerido
-              </span>
-              <span className="text-sm ">
-                {typeof incidence.params?.mas === 'string' || typeof incidence.params?.mas === 'number' ? String(incidence.params.mas) : "--"}
-              </span>
-            </div>
-            <div className="flex flex-col col-span-2 gap-1 w-full border px-2 py-1 rounded-xl border-[#E5E5E0]">
-              <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
-                Chassis ou Cassete
-              </span>
-              <span className="text-sm ">
-                {incidence.params?.cassetteSize || "--"}
-              </span>
-            </div>
-          </div>
-        </div>
+          )}
 
-        {/* X-Ray Display */}
-        {xray && (
-           <div 
-             className="w-full max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-md cursor-zoom-in relative group"
-             onClick={() => setFullscreenImage(xray.url)}
-           >
-             <img src={xray.url} alt="Radiografia" className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
-             <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-               <ZoomIn className="w-5 h-5 text-white" />
-             </div>
-             {xray.caption && (
-               <div className="bg-gray-100 p-2 text-xs text-gray-600 text-center">{xray.caption}</div>
-             )}
-           </div>
-        )}
+          {/* YouTube Video Player */}
+          {isOnline && videoId && (
+            <div className="w-full flex flex-col gap-3">
+               {!showVideo ? (
+                 <button 
+                   onClick={() => setShowVideo(true)}
+                   className="w-full py-4 bg-[#FF0000] hover:bg-[#CC0000] text-white rounded-2xl flex items-center justify-center gap-3 transition-all shadow-md font-bold active:scale-[0.98]"
+                 >
+                   <Play className="w-6 h-6 fill-current" />
+                   Ver Vídeo Demonstrativo
+                 </button>
+               ) : (
+                 <>
+                   <div className="flex justify-between items-center">
+                     <h3 className="text-[#555555] font-bold text-sm uppercase">
+                       Vídeo Demonstrativo
+                     </h3>
+                     <button 
+                       onClick={() => setShowVideo(false)}
+                       className="text-[10px] font-bold text-[#FF0000] uppercase tracking-wider flex items-center gap-1 bg-red-50 px-2 py-1 rounded-lg"
+                     >
+                       <X className="w-3 h-3" />
+                       Ocultar vídeo
+                     </button>
+                   </div>
+                   <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md bg-black animate-in zoom-in-95 duration-300">
+                     <iframe
+                       className="absolute inset-0 w-full h-full"
+                       src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                       title={incidence.youtubeTitle || "Vídeo de Posicionamento"}
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                       allowFullScreen
+                     ></iframe>
+                   </div>
+                   {incidence.youtubeTitle && (
+                     <p className="text-xs text-gray-500 italic text-center px-4">
+                       {incidence.youtubeTitle}
+                     </p>
+                   )}
+                 </>
+               )}
+            </div>
+          )}
 
-        {/* Structures Section */}
-        {incidence.structures && (
+          {/* Positioning Section */}
           <div
             className="rounded-2xl p-5 shadow-sm border border-black/5"
             style={{ backgroundColor: bgColor }}
           >
             <h3 className="text-[#555555] font-bold text-sm mb-3 uppercase">
-              Estruturas demonstradas
+              Posicionamento
             </h3>
             <p className="text-[#000000] text-sm leading-relaxed">
-              {incidence.structures}
+              {incidence.position || "Informação não disponível."}
             </p>
           </div>
-        )}
 
-        {/* Criteria Section */}
-        {incidence.criteria && incidence.criteria.length > 0 && (
+          {/* Technique Section */}
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-black/5">
-            <h3 className="text-[#555555] font-bold text-sm mb-3 uppercase">
-              Critérios de avaliação
+            <h3 className="text-[#555555] font-bold text-sm mb-4 uppercase">
+              Técnica Sugerida
             </h3>
-            <div className="flex flex-col gap-4">
-              {incidence.criteria.map((criterion, idx) => (
-                <div key={criterion.id} className="flex gap-3">
-                  <div
-                    className="rounded-full w-6 h-6 flex items-center justify-center shrink-0 text-xs font-bold"
-                    style={{ backgroundColor: bgColor, color: color }}
-                  >
-                    {idx + 1}
-                  </div>
-                  <p className="text-[#000000] text-sm leading-relaxed">
-                    {criterion.description}
-                  </p>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
+                <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
+                  Raio Central
+                </span>
+                <span className="text-sm ">
+                  {incidence.params?.centralRay || "--"}
+                </span>
+              </div>
+              <div className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
+                <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
+                  DFF
+                </span>
+                <span className="text-sm ">
+                  {incidence.params?.ffd || "--"}
+                </span>
+              </div>
+              <div className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
+                <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
+                  KVp Sugerido
+                </span>
+                <span className="text-sm ">
+                  {incidence.params?.kvp || "--"}
+                </span>
+              </div>
+              <div className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
+                <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
+                  mAs Sugerido
+                </span>
+                <span className="text-sm ">
+                  {typeof incidence.params?.mas === 'string' || typeof incidence.params?.mas === 'number' ? String(incidence.params.mas) : "--"}
+                </span>
+              </div>
+              <div className="flex flex-col col-span-2 gap-1 w-full border px-2 py-1 rounded-xl border-[#E5E5E0]">
+                <span className="text-[#999999] text-[10px] font-bold uppercase tracking-wider">
+                  Chassis ou Cassete
+                </span>
+                <span className="text-sm ">
+                  {incidence.params?.cassetteSize || "--"}
+                </span>
+              </div>
             </div>
           </div>
-        )}
 
-        {/* Tech Tip Section */}
-        {incidence.techTip && (
-          <div className="bg-[#FAEEDA] rounded-2xl p-5 shadow-sm border border-black/5">
-            <h3 className="text-[#555555] font-bold text-sm mb-3 uppercase">
-              Dica do técnico
-            </h3>
-            <p className="text-[#000000] text-sm leading-relaxed">
-              {incidence.techTip}
-            </p>
-          </div>
-        )}
+          {/* X-Ray Display */}
+          {xray && (
+             <div 
+               className="w-full rounded-2xl overflow-hidden shadow-md cursor-zoom-in relative group"
+               onClick={() => setFullscreenImage(xray.url)}
+             >
+               <img src={xray.url} alt="Radiografia" className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+               <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                 <ZoomIn className="w-5 h-5 text-white" />
+               </div>
+               {xray.caption && (
+                 <div className="bg-gray-100 p-2 text-xs text-gray-600 text-center">{xray.caption}</div>
+               )}
+             </div>
+          )}
+
+          {/* Structures Section */}
+          {incidence.structures && (
+            <div
+              className="rounded-2xl p-5 shadow-sm border border-black/5"
+              style={{ backgroundColor: bgColor }}
+            >
+              <h3 className="text-[#555555] font-bold text-sm mb-3 uppercase">
+                Estruturas demonstradas
+              </h3>
+              <p className="text-[#000000] text-sm leading-relaxed">
+                {incidence.structures}
+              </p>
+            </div>
+          )}
+
+          {/* Criteria Section */}
+          {incidence.criteria && incidence.criteria.length > 0 && (
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-black/5">
+              <h3 className="text-[#555555] font-bold text-sm mb-3 uppercase">
+                Critérios de avaliação
+              </h3>
+              <div className="flex flex-col gap-4">
+                {incidence.criteria.map((criterion, idx) => (
+                  <div key={criterion.id} className="flex gap-3">
+                    <div
+                      className="rounded-full w-6 h-6 flex items-center justify-center shrink-0 text-xs font-bold"
+                      style={{ backgroundColor: bgColor, color: color }}
+                    >
+                      {idx + 1}
+                    </div>
+                    <p className="text-[#000000] text-sm leading-relaxed">
+                      {criterion.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tech Tip Section */}
+          {incidence.techTip && (
+            <div className="bg-[#FAEEDA] rounded-2xl p-5 shadow-sm border border-black/5">
+              <h3 className="text-[#555555] font-bold text-sm mb-3 uppercase">
+                Dica do técnico
+              </h3>
+              <p className="text-[#000000] text-sm leading-relaxed">
+                {incidence.techTip}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Fullscreen Image Overlay */}

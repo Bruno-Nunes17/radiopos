@@ -14,6 +14,11 @@ export const usePWAInstall = () => {
   const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
+    // Se já estiver em modo standalone, não precisamos escutar o evento
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      return;
+    }
+
     const handleBeforeInstallPrompt = (e: Event) => {
       // Impede o navegador de mostrar o prompt automático
       e.preventDefault();
@@ -22,15 +27,17 @@ export const usePWAInstall = () => {
       setIsInstallable(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    // Verifica se já está instalado
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    const handleAppInstalled = () => {
       setIsInstallable(false);
-    }
+      setInstallPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, []);
 

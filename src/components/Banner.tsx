@@ -13,6 +13,7 @@ interface BannerProps {
   icon?: string;
   showSearch?: boolean;
   isSaved?: boolean;
+  searchPlaceholder?: string;
   onToggleSave?: () => void;
   onSearch?: (value: string) => void;
 }
@@ -27,6 +28,7 @@ const Banner: React.FC<BannerProps> = ({
   icon,
   showSearch = true,
   isSaved = false,
+  searchPlaceholder,
   onToggleSave,
   onSearch,
 }) => {
@@ -87,7 +89,8 @@ const Banner: React.FC<BannerProps> = ({
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white w-5 h-5" />
             <input
               type="text"
-              placeholder="Buscar incidência ou região"
+              placeholder={searchPlaceholder || "Buscar incidência ou região"}
+              onChange={(e) => onSearch?.(e.target.value)}
               className="w-full h-12 bg-white/20 rounded-2xl pl-12 pr-4 text-sm outline-none shadow-sm placeholder:text-white text-white border border-white/10"
             />
           </div>
@@ -140,7 +143,8 @@ const Banner: React.FC<BannerProps> = ({
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#999999] w-5 h-5" />
               <input
                 type="text"
-                placeholder="Buscar em Crânio"
+                placeholder={searchPlaceholder || "Buscar"}
+                onChange={(e) => onSearch?.(e.target.value)}
                 className="w-full h-12 bg-white rounded-2xl pl-12 pr-4 text-sm outline-none shadow-md placeholder:text-[#999999] text-[#000000] border border-black/5"
               />
             </div>
@@ -170,7 +174,7 @@ const Banner: React.FC<BannerProps> = ({
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#999999] w-5 h-5" />
               <input
                 type="text"
-                placeholder="Buscar incidência"
+                placeholder={searchPlaceholder || "Buscar incidência"}
                 onChange={(e) => onSearch?.(e.target.value)}
                 className="w-full h-12 bg-white rounded-2xl pl-12 pr-4 text-sm outline-none shadow-md placeholder:text-[#999999] text-[#000000] border border-black/5"
               />

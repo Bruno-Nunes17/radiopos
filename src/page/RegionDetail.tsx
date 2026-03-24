@@ -59,6 +59,7 @@ const RegionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, loading } = useData();
+  const [search, setSearch] = React.useState("");
 
   if (loading && !data) {
     return <RegionSkeleton />;
@@ -71,8 +72,13 @@ const RegionDetail: React.FC = () => {
     return <NotFound />;
   }
 
+  const filteredIncidences = regionIncidences.filter(i => 
+    i.name.toLowerCase().includes(search.toLowerCase()) ||
+    i.subcategoria.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   // Agrupar incidências por subcategoria
-  const groupedIncidences = regionIncidences.reduce((acc, incidence) => {
+  const groupedIncidences = filteredIncidences.reduce((acc, incidence) => {
     const subcategory = incidence.subcategoria.name || "Geral";
     if (!acc[subcategory]) {
       acc[subcategory] = [];
@@ -97,6 +103,9 @@ const RegionDetail: React.FC = () => {
         icon={icon}
         color={color}
         bgColor={bgColor}
+        showSearch={true}
+        searchPlaceholder={`Buscar em ${region.name}`}
+        onSearch={setSearch}
       />
 
       <div className="px-6 mt-12 flex flex-col gap-8 pb-10">
@@ -123,6 +132,10 @@ const RegionDetail: React.FC = () => {
             </div>
           </div>
         ))}
+
+        {filteredIncidences.length === 0 && search && (
+          <p className="text-center text-gray-400 mt-10">Nenhum resultado para "{search}"</p>
+        )}
       </div>
     </Layout>
   );

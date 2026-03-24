@@ -5,6 +5,7 @@ import Banner from "../components/Banner";
 import AnatomicalCard from "../components/AnatomicalCard";
 import IncidenceCard from "../components/IncidenceCard";
 import { useData } from "../hooks/useData";
+import Skeleton from "../components/Skeleton";
 
 const iconMap: Record<string, string> = {
   "cranio": "/cranio.svg",
@@ -29,18 +30,47 @@ const getCategoryKey = (id: string, name: string): string => {
   return id;
 };
 
+const HomeSkeleton = () => (
+  <Layout>
+    <div className="w-full h-48 bg-gray-200 animate-pulse" />
+    <div className="px-6 mt-8">
+      <Skeleton className="h-4 w-32 mb-4" />
+      <div className="grid grid-cols-2 gap-4 w-full">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div key={i} className="rounded-2xl p-4 flex flex-col gap-3 bg-gray-100 border border-black/5 animate-pulse">
+            <Skeleton className="w-15 h-15 rounded-xl" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-3 w-1/2" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div className="px-6 mt-10 pb-10">
+      <Skeleton className="h-4 w-48 mb-4" />
+      <div className="flex flex-col gap-3">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="bg-white rounded-2xl p-3 flex items-center gap-4 border border-black/5 animate-pulse">
+            <Skeleton className="w-12 h-12 rounded-xl shrink-0" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-1/2" />
+              <Skeleton className="h-3 w-1/4" />
+            </div>
+            <Skeleton className="w-5 h-5 rounded-full" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </Layout>
+);
+
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { data, loading, recentIncidences } = useData();
 
   if (loading && !data) {
-    return (
-      <Layout>
-        <div className="flex items-center justify-center h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
-      </Layout>
-    );
+    return <HomeSkeleton />;
   }
 
   const categories = data?.categories || [];

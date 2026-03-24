@@ -4,6 +4,41 @@ import { X, ZoomIn, Play } from "lucide-react";
 import Layout from "../components/Layout";
 import Banner from "../components/Banner";
 import { useData } from "../hooks/useData";
+import Skeleton from "../components/Skeleton";
+import NotFound from "./NotFound";
+
+const IncidenceSkeleton = () => (
+  <Layout>
+    <div className="w-full h-48 bg-gray-200 animate-pulse" />
+    <div className="w-full max-w-4xl mx-auto px-6 mt-6 flex flex-col gap-6 pb-10">
+      <Skeleton className="w-full aspect-video rounded-2xl mt-5" />
+      <Skeleton className="w-full h-14 rounded-2xl" />
+      <div className="rounded-2xl p-5 border border-black/5 bg-gray-50/50">
+        <Skeleton className="h-4 w-32 mb-3" />
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="h-3 w-2/3" />
+        </div>
+      </div>
+      <div className="bg-white rounded-2xl p-5 border border-black/5">
+        <Skeleton className="h-4 w-40 mb-4" />
+        <div className="grid grid-cols-2 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="flex flex-col gap-1 border px-2 py-1 rounded-xl border-[#E5E5E0]">
+              <Skeleton className="h-2 w-16 mb-1" />
+              <Skeleton className="h-4 w-20" />
+            </div>
+          ))}
+          <div className="flex flex-col col-span-2 gap-1 w-full border px-2 py-1 rounded-xl border-[#E5E5E0]">
+            <Skeleton className="h-2 w-24 mb-1" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Layout>
+);
 
 const IncidenceDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,21 +69,11 @@ const IncidenceDetail: React.FC = () => {
   }, []);
 
   if (loading && !data) {
-    return (
-      <Layout>
-        <div className="flex items-center justify-center h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
-      </Layout>
-    );
+    return <IncidenceSkeleton />;
   }
 
   if (!incidence) {
-    return (
-      <Layout>
-        <div className="p-6">Incidência não encontrada</div>
-      </Layout>
-    );
+    return <NotFound />;
   }
 
   const category = incidence.subcategoria.categoria;

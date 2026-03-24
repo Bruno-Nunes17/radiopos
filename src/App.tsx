@@ -5,6 +5,7 @@ import RegionDetail from "./page/RegionDetail";
 import IncidenceDetail from "./page/IncidenceDetail";
 import Saved from "./page/Saved";
 import About from "./page/About";
+import NotFound from "./page/NotFound";
 import { DataProvider } from "./context/DataContext";
 
 const App: React.FC = () => {
@@ -17,6 +18,7 @@ const App: React.FC = () => {
           <Route path="/incidence/:id" element={<IncidenceDetail />} />
           <Route path="/saved" element={<Saved />} />
           <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </DataProvider>

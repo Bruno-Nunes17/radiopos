@@ -4,6 +4,8 @@ import Layout from "../components/Layout";
 import Banner from "../components/Banner";
 import IncidenceCard from "../components/IncidenceCard";
 import { useData } from "../hooks/useData";
+import Skeleton from "../components/Skeleton";
+import NotFound from "./NotFound";
 
 const iconMap: Record<string, string> = {
   "cranio": "/cranio.svg",
@@ -28,30 +30,45 @@ const getCategoryKey = (id: string, name: string): string => {
   return id;
 };
 
+const RegionSkeleton = () => (
+  <Layout>
+    <div className="w-full h-48 bg-gray-200 animate-pulse" />
+    <div className="px-6 mt-12 flex flex-col gap-8 pb-10">
+      {[1, 2].map((group) => (
+        <div key={group} className="flex flex-col gap-4">
+          <Skeleton className="h-6 w-40 mb-2" />
+          <div className="flex flex-col gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-white rounded-2xl p-3 flex items-center gap-4 border border-black/5 animate-pulse">
+                <Skeleton className="w-12 h-12 rounded-xl shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-3 w-1/4" />
+                </div>
+                <Skeleton className="w-5 h-5 rounded-full" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </Layout>
+);
+
 const RegionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, loading } = useData();
 
   if (loading && !data) {
-    return (
-      <Layout>
-        <div className="flex items-center justify-center h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-        </div>
-      </Layout>
-    );
+    return <RegionSkeleton />;
   }
 
   const region = data?.categories.find((r) => r.id === id);
   const regionIncidences = data?.incidences.filter((i) => i.subcategoria.categoria.id === id) || [];
 
   if (!region) {
-    return (
-      <Layout>
-        <div className="p-6">Região não encontrada</div>
-      </Layout>
-    );
+    return <NotFound />;
   }
 
   // Agrupar incidências por subcategoria

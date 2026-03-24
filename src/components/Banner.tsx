@@ -7,6 +7,7 @@ interface BannerProps {
   variant?: "home" | "region" | "saved" | "incidence" | "about";
   title?: string;
   subtitle?: string;
+  position?: string;
   count?: string;
   color?: string;
   bgColor?: string;
@@ -25,6 +26,7 @@ const Banner: React.FC<BannerProps> = ({
   count,
   color,
   bgColor,
+  position,
   icon,
   showSearch = true,
   isSaved = false,
@@ -48,12 +50,12 @@ const Banner: React.FC<BannerProps> = ({
               RadioPos
             </h1>
           </div>
-          
+
           <div className="relative">
             {ModalOpen && (
               <>
-                <div 
-                  className="fixed inset-0 z-40" 
+                <div
+                  className="fixed inset-0 z-40"
                   onClick={() => setModalOpen(false)}
                 />
                 <div className="absolute top-14 right-0 z-50 animate-in fade-in zoom-in duration-200 origin-top-right">
@@ -61,17 +63,17 @@ const Banner: React.FC<BannerProps> = ({
                 </div>
               </>
             )}
-            
+
             <button
               onClick={() => handleModal()}
               className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-lg ${
-                ModalOpen 
-                  ? "bg-white text-[#00874A] rotate-90 scale-110" 
+                ModalOpen
+                  ? "bg-white text-[#00874A] rotate-90 scale-110"
                   : "bg-white/15 hover:bg-white/25 active:scale-95"
               }`}
             >
-              <EllipsisVertical 
-                className={`w-8 h-8 transition-colors duration-300 ${ModalOpen ? "text-[#00874A]" : "text-white"}`} 
+              <EllipsisVertical
+                className={`w-8 h-8 transition-colors duration-300 ${ModalOpen ? "text-[#00874A]" : "text-white"}`}
               />
             </button>
           </div>
@@ -218,6 +220,9 @@ const Banner: React.FC<BannerProps> = ({
             {title}
           </h2>
           <p className="text-[#555555] text-sm font-medium">{subtitle}</p>
+          <div className="w-fit bg-white/40 p-2 rounded-xl mt-2">
+            <p className="font-bold" style={{ color: color }}>{position}</p>
+          </div>
         </div>
       </div>
     );

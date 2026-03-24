@@ -105,6 +105,7 @@ const IncidenceDetail: React.FC = () => {
         bgColor={bgColor}
         isSaved={isSaved}
         onToggleSave={() => toggleSave(incidence)}
+        position={incidence.position || ""}
       />
 
       <div className="w-full max-w-4xl mx-auto">
@@ -185,7 +186,7 @@ const IncidenceDetail: React.FC = () => {
               Posicionamento
             </h3>
             <p className="text-[#000000] text-sm leading-relaxed">
-              {incidence.position || "Informação não disponível."}
+              {incidence.description || "Informação não disponível."}
             </p>
           </div>
 

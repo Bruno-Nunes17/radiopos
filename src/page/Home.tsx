@@ -82,18 +82,14 @@ const Home: React.FC = () => {
       <Banner variant="home" showSearch={false} />
 
       {/* Anatomical Regions Section */}
-      <div className="px-6 mt-8 flex flex-col items-start min-h-[300px]">
-        <h3 className="text-[#555555] font-semibold mb-4 text-sm uppercase">
-          Regiões anatômicas
-        </h3>
-
+      <div className="px-6 mt-8 flex flex-col items-start min-h-75">
         {categories.length === 0 ? (
           <div className="w-full flex flex-col items-center justify-center py-10 text-center animate-in fade-in duration-500">
             <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-dashed border-gray-200">
               <Database className="w-10 h-10 text-gray-300" />
             </div>
             <h4 className="text-gray-600 font-bold">Nenhum dado encontrado</h4>
-            <p className="text-gray-400 text-sm mt-1 mb-6 max-w-[200px]">
+            <p className="text-gray-400 text-sm mt-1 mb-6 max-w-50">
               Não conseguimos carregar as regiões anatômicas.
             </p>
             <button 
@@ -105,21 +101,26 @@ const Home: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4 w-full">
-            {categories.map((category) => {
-              const key = getCategoryKey(category.id, category.name);
-              return (
-                <AnatomicalCard
-                  key={category.id}
-                  name={category.name}
-                  count={incidences.filter(i => i.subcategoria.categoria.id === category.id).length}
-                  icon={iconMap[key] || "/favicon.svg"}
-                  bgColor={category.colorBg}
-                  onClick={() => navigate(`/region/${category.id}`)}
-                />
-              );
-            })}
-          </div>
+          <>
+            <h3 className="text-[#555555] font-semibold mb-4 text-sm uppercase">
+              Regiões anatômicas
+            </h3>
+            <div className="grid grid-cols-2 gap-4 w-full">
+              {categories.map((category) => {
+                const key = getCategoryKey(category.id, category.name);
+                return (
+                  <AnatomicalCard
+                    key={category.id}
+                    name={category.name}
+                    count={incidences.filter(i => i.subcategoria.categoria.id === category.id).length}
+                    icon={iconMap[key] || "/favicon.svg"}
+                    bgColor={category.colorBg}
+                    onClick={() => navigate(`/region/${category.id}`)}
+                  />
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
 

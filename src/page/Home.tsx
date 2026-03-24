@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Database, RefreshCw } from "lucide-react";
 import Layout from "../components/Layout";
 import Banner from "../components/Banner";
 import AnatomicalCard from "../components/AnatomicalCard";
@@ -67,7 +68,7 @@ const HomeSkeleton = () => (
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const { data, loading, recentIncidences } = useData();
+  const { data, loading, recentIncidences, sync } = useData();
 
   if (loading && !data) {
     return <HomeSkeleton />;
@@ -81,26 +82,45 @@ const Home: React.FC = () => {
       <Banner variant="home" showSearch={false} />
 
       {/* Anatomical Regions Section */}
-      <div className="px-6 mt-8 flex flex-col items-start">
+      <div className="px-6 mt-8 flex flex-col items-start min-h-[300px]">
         <h3 className="text-[#555555] font-semibold mb-4 text-sm uppercase">
           Regiões anatômicas
         </h3>
 
-        <div className="grid grid-cols-2 gap-4 w-full">
-          {categories.map((category) => {
-            const key = getCategoryKey(category.id, category.name);
-            return (
-              <AnatomicalCard
-                key={category.id}
-                name={category.name}
-                count={incidences.filter(i => i.subcategoria.categoria.id === category.id).length}
-                icon={iconMap[key] || "/favicon.svg"}
-                bgColor={category.colorBg}
-                onClick={() => navigate(`/region/${category.id}`)}
-              />
-            );
-          })}
-        </div>
+        {categories.length === 0 ? (
+          <div className="w-full flex flex-col items-center justify-center py-10 text-center animate-in fade-in duration-500">
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-dashed border-gray-200">
+              <Database className="w-10 h-10 text-gray-300" />
+            </div>
+            <h4 className="text-gray-600 font-bold">Nenhum dado encontrado</h4>
+            <p className="text-gray-400 text-sm mt-1 mb-6 max-w-[200px]">
+              Não conseguimos carregar as regiões anatômicas.
+            </p>
+            <button 
+              onClick={() => sync()}
+              className="flex items-center gap-2 px-6 py-3 bg-[#00874A] text-white rounded-xl font-bold shadow-md active:scale-95 transition-all"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Sincronizar Agora
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 w-full">
+            {categories.map((category) => {
+              const key = getCategoryKey(category.id, category.name);
+              return (
+                <AnatomicalCard
+                  key={category.id}
+                  name={category.name}
+                  count={incidences.filter(i => i.subcategoria.categoria.id === category.id).length}
+                  icon={iconMap[key] || "/favicon.svg"}
+                  bgColor={category.colorBg}
+                  onClick={() => navigate(`/region/${category.id}`)}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Recently Accessed Section */}

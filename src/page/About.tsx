@@ -64,7 +64,7 @@ const About: React.FC = () => {
               <span className="text-sm">suporte@radiopos.com</span>
             </a>
             <a 
-              href="https://github.com" 
+              href="https://github.com/Bruno-Nunes17/radiopos" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="flex items-center gap-3 p-3 text-gray-600 hover:text-[#00874A] hover:bg-green-50 rounded-xl transition-all"

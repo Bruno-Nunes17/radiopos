@@ -25,7 +25,7 @@ export default defineConfig({
         "torax.svg",
       ],
       manifest: {
-        name: "RadioPos - Radiologia Industrial",
+        name: "RadioPos - Posicionamentos radiológicos",
         short_name: "RadioPos",
         description: "Aplicação para consulta de posicionamentos radiológicos.",
         theme_color: "#ffffff",

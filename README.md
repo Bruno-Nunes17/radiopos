@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# RadioPos - Guia Digital de Radiologia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+O **RadioPos** é uma aplicação web progressiva (PWA) desenvolvida para auxiliar estudantes e profissionais de radiologia no posicionamento preciso de exames. O projeto oferece um guia rápido, intuitivo e acessível, com foco em usabilidade móvel e suporte offline.
 
-Currently, two official plugins are available:
+## 🚀 Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Exploração por Regiões:** Navegue por categorias anatômicas (Crânio, Tórax, Coluna, Pelve, Superiores, Inferiores).
+- **Detalhes de Incidência:** Informações completas sobre posicionamento, raio central, DFF, KVp, mAs e tamanho do chassis.
+- **Visualização de Mídia:** Imagens ilustrativas de posicionamento, radiografias de referência e vídeos demonstrativos (via YouTube).
+- **Favoritos:** Salve incidências para acesso rápido, inclusive quando estiver offline.
+- **Sincronização Offline:** Os dados são armazenados localmente no navegador para garantir o funcionamento sem internet.
+- **Busca Inteligente:** Encontre rapidamente qualquer incidência pelo nome ou subcategoria.
+- **Interface Moderna:** Design limpo com estados de carregamento (Skeleton Loaders) e transições suaves.
 
-## React Compiler
+## 🛠️ Tecnologias Utilizadas
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend:** [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **Estilização:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **Ícones:** [Lucide React](https://lucide.dev/)
+- **Roteamento:** [React Router 7](https://reactrouter.com/)
+- **API Client:** [Orval](https://orval.dev/) (Geração automática de hooks/fetch)
+- **PWA:** [vite-plugin-pwa](https://vite-pwa-org.netlify.app/)
+- **Banco de Dados Local:** IndexedDB (via `lib/offline-db.ts`)
 
-## Expanding the ESLint configuration
+## 📦 Como Executar o Projeto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Pré-requisitos
+- Node.js (v18+)
+- npm ou pnpm
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Instalação
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Bruno-Nunes17/radiopos.git
+   ```
+2. Entre na pasta do projeto:
+   ```bash
+   cd radiopos
+   ```
+3. Instale as dependências:
+   ```bash
+   npm install
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Execução
+Inicie o servidor de desenvolvimento:
+```bash
+npm run dev
+```
+Acesse `http://localhost:5173` no seu navegador.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Build para Produção
+Para gerar a versão otimizada da aplicação:
+```bash
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📱 Suporte PWA
+Para testar as funcionalidades de PWA (Service Workers, Manifesto), recomenda-se rodar o comando de preview após o build:
+```bash
+npm run preview
 ```
+
+## 📄 Licença
+Este projeto é para fins educacionais e profissionais na área de radiologia.
+
+---
+Desenvolvido com ❤️ para a comunidade radiológica.

@@ -109,32 +109,58 @@ const RegionDetail: React.FC = () => {
       />
 
       <div className="px-6 mt-12 flex flex-col gap-8 pb-10">
-        {subcategories.map((subcat) => (
-          <div key={subcat} className="flex flex-col gap-4">
-            {subcategories.length > 1 && (
-              <h3 className="text-lg font-bold text-gray-800 border-l-4 pl-3" style={{ borderColor: color }}>
-                {subcat}
-              </h3>
-            )}
-            
-            <div className="flex flex-col gap-4">
-              {groupedIncidences[subcat].map((item) => (
-                <IncidenceCard
-                  key={item.id}
-                  title={item.name}
-                  subtitle={item.subcategoria.name}
-                  icon={icon}
-                  color={color}
-                  bgColor={bgColor}
-                  onClick={() => navigate(`/incidence/${item.id}`)}
-                />
-              ))}
+        {regionIncidences.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in duration-500">
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-dashed border-gray-200">
+              <span className="text-3xl text-gray-300">
+                {icon ? (
+                  <img src={icon} alt="" className="w-10 h-10 opacity-20 grayscale" />
+                ) : "📋"}
+              </span>
             </div>
+            <h3 className="text-gray-500 font-medium text-lg">Nenhuma incidência</h3>
+            <p className="text-gray-400 text-sm mt-2 max-w-[250px]">
+              Ainda não há incidências cadastradas para a região de {region.name}.
+            </p>
           </div>
-        ))}
+        ) : (
+          <>
+            {subcategories.map((subcat) => (
+              <div key={subcat} className="flex flex-col gap-4">
+                {subcategories.length > 1 && (
+                  <h3 className="text-lg font-bold text-gray-800 border-l-4 pl-3" style={{ borderColor: color }}>
+                    {subcat}
+                  </h3>
+                )}
+                
+                <div className="flex flex-col gap-4">
+                  {groupedIncidences[subcat].map((item) => (
+                    <IncidenceCard
+                      key={item.id}
+                      title={item.name}
+                      subtitle={item.subcategoria.name}
+                      icon={icon}
+                      color={color}
+                      bgColor={bgColor}
+                      onClick={() => navigate(`/incidence/${item.id}`)}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
 
-        {filteredIncidences.length === 0 && search && (
-          <p className="text-center text-gray-400 mt-10">Nenhum resultado para "{search}"</p>
+            {filteredIncidences.length === 0 && search && (
+              <div className="flex flex-col items-center justify-center py-10 text-center animate-in fade-in duration-300">
+                <p className="text-gray-400">Nenhum resultado para "{search}"</p>
+                <button 
+                  onClick={() => setSearch("")}
+                  className="mt-4 text-[#00874A] text-sm font-bold underline"
+                >
+                  Limpar busca
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </Layout>

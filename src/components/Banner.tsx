@@ -47,7 +47,9 @@ const Banner: React.FC<BannerProps> = ({
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <h1 className="text-white text-[24px] font-bold tracking-tight">
-              RadioPos
+              <b className="text-[#072e59]">
+                Radio<b className="text-white">Pos</b>
+              </b>
             </h1>
           </div>
 
@@ -81,7 +83,7 @@ const Banner: React.FC<BannerProps> = ({
 
         <div className="flex flex-col">
           <h2 className="text-white text-[22px] font-bold leading-tight">
-            Posicionamentos
+            Manual de Posicionamentos
           </h2>
           <p className="text-white/90 text-sm font-medium">Radiológicos</p>
         </div>
@@ -221,7 +223,9 @@ const Banner: React.FC<BannerProps> = ({
           </h2>
           <p className="text-[#555555] text-sm font-medium">{subtitle}</p>
           <div className="w-fit bg-white/40 p-2 rounded-xl mt-2">
-            <p className="font-bold" style={{ color: color }}>{position}</p>
+            <p className="font-bold" style={{ color: color }}>
+              {position}
+            </p>
           </div>
         </div>
       </div>

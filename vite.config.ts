@@ -23,6 +23,8 @@ export default defineConfig({
         "pelve.svg",
         "superiores.svg",
         "torax.svg",
+        "radiopos-icon.png",
+        "splashscreen_laradio.png",
       ],
       manifest: {
         name: "RadioPos - Posicionamentos radiológicos",
@@ -39,14 +41,19 @@ export default defineConfig({
             type: "image/svg+xml",
           },
           {
-            src: "favicon.svg",
-            sizes: "512x512",
-            type: "image/svg+xml",
+            src: "radiopos-icon.png",
+            sizes: "192x192",
+            type: "image/png",
           },
           {
-            src: "favicon.svg",
+            src: "radiopos-icon.png",
             sizes: "512x512",
-            type: "image/svg+xml",
+            type: "image/png",
+          },
+          {
+            src: "radiopos-icon.png",
+            sizes: "512x512",
+            type: "image/png",
             purpose: "any maskable",
           },
         ],

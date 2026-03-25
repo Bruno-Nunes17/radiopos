@@ -51,7 +51,7 @@ export default defineConfig({
             type: "image/png",
           },
           {
-            src: "radiopos-icon.png",
+            src: "splashscreen_laradio.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",

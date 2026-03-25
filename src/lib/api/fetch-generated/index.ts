@@ -1125,12 +1125,19 @@ export type GetSync200IncidencesItem = {
   subcategoria: GetSync200IncidencesItemSubcategoria;
 };
 
+export type GetSync200AllIds = {
+  categories: string[];
+  subcategories: string[];
+  incidences: string[];
+};
+
 export type GetSync200 = {
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   syncedAt: string;
   categories: GetSync200CategoriesItem[];
   subcategories: GetSync200SubcategoriesItem[];
   incidences: GetSync200IncidencesItem[];
+  allIds: GetSync200AllIds;
 };
 
 export type GetSync400 = {
@@ -1211,15 +1218,6 @@ export type GetApiV1ApiKeys500 = {
   error: string;
   code: string;
 };
-
-/**
- * @nullable
- */
-export type DeleteApiV1ApiKeysId204 = typeof DeleteApiV1ApiKeysId204[keyof typeof DeleteApiV1ApiKeysId204] | null;
-
-
-export const DeleteApiV1ApiKeysId204 = {
-} as const;
 
 export type DeleteApiV1ApiKeysId401 = {
   error: string;
@@ -2374,7 +2372,7 @@ export const getApiV1ApiKeys = async ( options?: RequestInit): Promise<getApiV1A
  * @summary Revogar API Key
  */
 export type deleteApiV1ApiKeysIdResponse204 = {
-  data: DeleteApiV1ApiKeysId204
+  data: void
   status: 204
 }
 

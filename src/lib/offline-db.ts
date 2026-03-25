@@ -106,6 +106,30 @@ const mergeById = <T extends { id: string }>(current: T[], incoming: T[]): T[] =
   return Array.from(map.values());
 };
 
+const pruneStore = async (storeName: string, validIds: string[]): Promise<void> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(storeName, "readwrite");
+    const store = transaction.objectStore(storeName);
+    const request = store.getAll();
+
+    request.onsuccess = () => {
+      const items = (request.result || []) as { id: string }[];
+      const deletePromises = items
+        .filter((item) => !validIds.includes(item.id))
+        .map((item) => {
+          return new Promise<void>((res, rej) => {
+            const delRequest = store.delete(item.id);
+            delRequest.onsuccess = () => res();
+            delRequest.onerror = () => rej(delRequest.error);
+          });
+        });
+      Promise.all(deletePromises).then(() => resolve()).catch(reject);
+    };
+    request.onerror = () => reject(request.error);
+  });
+};
+
 export const saveSyncData = async (data: GetSync200): Promise<void> => {
   const db = await openDB();
   const currentData = await getSyncData();
@@ -118,9 +142,31 @@ export const saveSyncData = async (data: GetSync200): Promise<void> => {
       categories: mergeById(currentData.categories, data.categories),
       subcategories: mergeById(currentData.subcategories, data.subcategories),
       incidences: mergeById(currentData.incidences, data.incidences),
+      allIds: data.allIds,
     };
   } else {
     mergedData = data;
+  }
+
+  // Limpeza de Cache (Pruning)
+  // Deletar as incidências órfãs antes das subcategorias se necessário.
+  // Aqui filtramos as listas locais baseadas no allIds do servidor.
+  if (data.allIds) {
+    mergedData.incidences = mergedData.incidences.filter(item => 
+      data.allIds.incidences.includes(item.id)
+    );
+    
+    mergedData.subcategories = mergedData.subcategories.filter(item => 
+      data.allIds.subcategories.includes(item.id)
+    );
+    
+    mergedData.categories = mergedData.categories.filter(item => 
+      data.allIds.categories.includes(item.id)
+    );
+
+    // Pruning de outras stores que guardam incidências
+    await pruneStore(STORES.SAVED, data.allIds.incidences);
+    await pruneStore(STORES.RECENT, data.allIds.incidences);
   }
 
   return new Promise((resolve, reject) => {

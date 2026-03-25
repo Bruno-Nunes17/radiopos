@@ -14,6 +14,7 @@ export interface DataContextType {
   addToRecent: (incidence: GetSync200IncidencesItem) => Promise<void>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -27,6 +28,13 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const result = await syncAppData();
     if (result) {
       setData(result);
+      // Refresh saved and recent after potential pruning during sync
+      const [saved, recent] = await Promise.all([
+        getSavedIncidences(),
+        getRecentIncidences(5)
+      ]);
+      setSavedIncidences(saved);
+      setRecentIncidences(recent);
     }
     setLoading(false);
   };
